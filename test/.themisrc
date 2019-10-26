@@ -14,8 +14,8 @@ function! HelpeekTestBeforeEach(assert) abort
         call self.equals(window_count, a:count, message)
     endfunction
 
-    function! a:assert.contains_line(needle) abort
-        let line = getline(line('.'))
+    function! a:assert.contains_line(needle, line) abort
+        let line = getline(a:line)
         call self.true(count(line, a:needle) != 0, a:needle . ' must be in the line, but actual: ' . line)
     endfunction
 

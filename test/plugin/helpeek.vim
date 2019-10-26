@@ -20,7 +20,8 @@ function! s:suite.normal()
 
     call s:assert.window_count(3)
     call s:assert.equals(&filetype, 'help')
-    call s:assert.contains_line('*:' . target . '*')
+    call s:assert.contains_line('*:' . target . '*', line('.') - 1)
+    call s:assert.equals(col('.'), 1)
 endfunction
 
 function! s:suite.normal_with_empty()

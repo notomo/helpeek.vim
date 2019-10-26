@@ -30,8 +30,8 @@ function! s:new(tag) abort
 
     function! help.buffer() abort
         execute 'help' self._tag
-        normal! ze
         let bufnr = bufnr('%')
+        call setpos('.', [bufnr, line('.') + 1, 1, 0])
         quit
         return bufnr
     endfunction
