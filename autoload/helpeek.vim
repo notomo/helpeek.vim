@@ -2,7 +2,7 @@
 let s:window = helpeek#window#new()
 
 function! helpeek#main() abort
-    let target = s:get_target()
+    let target = helpeek#target#get()
     if empty(target)
         return
     endif
@@ -18,22 +18,4 @@ function! helpeek#main() abort
     call s:window.open(bufnr)
 
     redraw
-endfunction
-
-function! s:get_target() abort
-    if mode() ==# 'c'
-        let line = getcmdline()
-    else
-        let line = expand('<cword>')
-    endif
-    if empty(line)
-        return ''
-    endif
-
-    let factors = split(line, '\v\s')
-    if len(factors) == 1
-        return ':' . factors[0]
-    endif
-
-    return factors[-1]
 endfunction

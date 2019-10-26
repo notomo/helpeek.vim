@@ -7,6 +7,7 @@ function! HelpeekTestBeforeEach(assert) abort
     execute 'cd' s:root
 
     call helpeek#logger#set_func({ msg -> themis#log(msg) })
+    call themis#log('')
 
     function! a:assert.window_count(count) abort
         let window_count = tabpagewinnr(tabpagenr(), '$')
