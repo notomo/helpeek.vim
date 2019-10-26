@@ -7,17 +7,13 @@ function! helpeek#main() abort
         return
     endif
 
-    let tag = s:find_tag(target)
-    if empty(tag)
+    let help = helpeek#help#find(target)
+    if empty(help)
         return
     endif
     call s:window.close()
 
-    execute 'help' tag
-    let bufnr = bufnr('%')
-    let line = line('.')
-    quit
-
+    let bufnr = help.buffer()
     call s:window.open(bufnr)
     redraw
 endfunction
@@ -38,24 +34,4 @@ function! s:get_target() abort
     endif
 
     return factors[-1]
-endfunction
-
-function! s:find_tag(pattern) abort
-    let help_path = fnamemodify(&helpfile, ':h') . '/tags'
-    let paths = [help_path]
-    call extend(paths, globpath(&runtimepath, 'doc/tags', v:true, v:true))
-
-    for path in paths
-        if !filereadable(path)
-            continue
-        endif
-        for line in readfile(path)
-            let tag = split(line, "\t")[0]
-            if count(tag, a:pattern) != 0
-                return tag
-            endif
-        endfor
-    endfor
-
-    return ''
 endfunction
