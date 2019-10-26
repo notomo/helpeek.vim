@@ -19,6 +19,13 @@ function! HelpeekTestBeforeEach(assert) abort
         call self.true(count(line, a:needle) != 0, a:needle . ' must be in the line, but actual: ' . line)
     endfunction
 
+    function! a:assert.not_exists_autocmd(name) abort
+        let autocmds = s:redir('autocmd')
+        for line in split(autocmds, "\n")
+            call self.true(count(line, a:name, v:true) == 0, a:name . ' should not be in the autocmd: ' . line)
+        endfor
+    endfunction
+
     filetype on
     syntax enable
 endfunction
@@ -30,4 +37,14 @@ function! HelpeekTestAfterEach() abort
 
     filetype off
     syntax off
+endfunction
+
+function! s:redir(cmd) abort
+    let [tmp_verbose, tmp_verbosefile] = [&verbose, &verbosefile]
+    set verbose=0 verbosefile=
+    redir => result
+    silent! execute a:cmd
+    redir END
+    let [&verbose, &verbosefile] = [tmp_verbose, tmp_verbosefile]
+    return result
 endfunction

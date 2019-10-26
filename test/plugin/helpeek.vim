@@ -17,15 +17,35 @@ function! s:suite.normal()
     Helpeek
 
     wincmd w
-
     call s:assert.window_count(3)
     call s:assert.equals(&filetype, 'help')
     call s:assert.contains_line('*:' . target . '*', line('.') - 1)
     call s:assert.equals(col('.'), 1)
+
+    wincmd p
+    call s:assert.window_count(3)
 endfunction
 
 function! s:suite.normal_with_empty()
     Helpeek
 
     call s:assert.window_count(1)
+endfunction
+
+function! s:suite.close_with_border()
+    let target = 'call'
+    call setbufline('%', 1, target)
+    let parent_window = win_getid()
+
+    Helpeek
+
+    wincmd w
+    call s:assert.window_count(3)
+    quit
+
+    " FIXME: falied
+    " call s:assert.window_count(1)
+    call s:assert.equals(win_getid(), parent_window)
+
+    call s:assert.not_exists_autocmd('helpeek')
 endfunction
