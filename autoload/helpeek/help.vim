@@ -30,6 +30,7 @@ function! s:new(tag) abort
 
     function! help.buffer() abort
         execute 'help' self._tag
+        normal! ze
         let bufnr = bufnr('%')
         quit
         return bufnr

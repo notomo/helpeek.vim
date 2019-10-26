@@ -12,14 +12,13 @@ endfunction
 
 function! s:suite.normal()
     let target = 'call'
-    setlocal buftype=nofile
     call setbufline('%', 1, target)
 
     Helpeek
 
     wincmd w
 
-    call s:assert.window_count(2)
+    call s:assert.window_count(3)
     call s:assert.equals(&filetype, 'help')
     call s:assert.contains_line('*:' . target . '*')
 endfunction

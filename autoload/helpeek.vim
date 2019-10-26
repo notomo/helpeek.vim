@@ -11,6 +11,7 @@ function! helpeek#main() abort
     if empty(help)
         return
     endif
+
     call s:window.close()
 
     let bufnr = help.buffer()
