@@ -1,0 +1,29 @@
+
+call themis#option('recursive', 1)
+
+let s:root = getcwd()
+
+function! HelpeekTestBeforeEach(assert) abort
+    execute 'cd' s:root
+
+    function! a:assert.window_count(count) abort
+        let window_count = tabpagewinnr(tabpagenr(), '$')
+        let message = printf('window count must be %s, but actual: %s', a:count, window_count)
+        call self.equals(window_count, a:count, message)
+    endfunction
+
+    function! a:assert.contains_line(needle) abort
+        let line = getline(line('.'))
+        call self.true(count(line, a:needle) != 0, a:needle . ' must be in the line, but actual: ' . line)
+    endfunction
+
+    filetype on
+    syntax enable
+endfunction
+
+function! HelpeekTestAfterEach() abort
+    silent! %bwipeout!
+
+    filetype off
+    syntax off
+endfunction
