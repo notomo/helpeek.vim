@@ -1,5 +1,8 @@
 
 function! helpeek#help#find(target) abort
+    let logger = helpeek#logger#new('help')
+    call logger.log('target: ' . a:target)
+
     let help_path = fnamemodify(&helpfile, ':h') . '/tags'
     let paths = [help_path]
     call extend(paths, globpath(&runtimepath, 'doc/tags', v:true, v:true))
@@ -11,6 +14,7 @@ function! helpeek#help#find(target) abort
         for line in readfile(path)
             let tag = split(line, "\t")[0]
             if count(tag, a:target) != 0
+                call logger.log('tag: ' . tag)
                 return s:new(tag)
             endif
         endfor

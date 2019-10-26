@@ -6,6 +6,8 @@ let s:root = getcwd()
 function! HelpeekTestBeforeEach(assert) abort
     execute 'cd' s:root
 
+    call helpeek#logger#set_func({ msg -> themis#log(msg) })
+
     function! a:assert.window_count(count) abort
         let window_count = tabpagewinnr(tabpagenr(), '$')
         let message = printf('window count must be %s, but actual: %s', a:count, window_count)
@@ -22,6 +24,8 @@ function! HelpeekTestBeforeEach(assert) abort
 endfunction
 
 function! HelpeekTestAfterEach() abort
+    tabedit
+    tabonly
     silent! %bwipeout!
 
     filetype off

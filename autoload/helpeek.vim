@@ -15,6 +15,7 @@ function! helpeek#main() abort
 
     let bufnr = help.buffer()
     call s:window.open(bufnr)
+
     redraw
 endfunction
 
@@ -24,12 +25,12 @@ function! s:get_target() abort
     else
         let line = expand('<cword>')
     endif
-    let factors = split(line, '\v\s')
-
-    let length = len(factors)
-    if length == 0
+    if empty(line)
         return ''
-    elseif length == 1
+    endif
+
+    let factors = split(line, '\v\s')
+    if len(factors) == 1
         return ':' . factors[0]
     endif
 

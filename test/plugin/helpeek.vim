@@ -12,6 +12,7 @@ endfunction
 
 function! s:suite.normal()
     let target = 'call'
+    setlocal buftype=nofile
     call setbufline('%', 1, target)
 
     Helpeek
@@ -21,4 +22,10 @@ function! s:suite.normal()
     call s:assert.window_count(2)
     call s:assert.equals(&filetype, 'help')
     call s:assert.contains_line('*:' . target . '*')
+endfunction
+
+function! s:suite.normal_with_empty()
+    Helpeek
+
+    call s:assert.window_count(1)
 endfunction
