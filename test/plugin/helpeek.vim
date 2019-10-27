@@ -10,7 +10,7 @@ function! s:suite.after_each()
     call HelpeekTestAfterEach()
 endfunction
 
-function! s:suite.normal()
+function! s:suite.nvim_normal()
     let target = 'call'
     call setbufline('%', 1, target)
 
@@ -26,13 +26,13 @@ function! s:suite.normal()
     call s:assert.window_count(3)
 endfunction
 
-function! s:suite.normal_with_empty()
+function! s:suite.nvim_normal_with_empty()
     Helpeek
 
     call s:assert.window_count(1)
 endfunction
 
-function! s:suite.close_with_border()
+function! s:suite.nvim_close_with_border()
     let target = 'call'
     call setbufline('%', 1, target)
 
@@ -46,3 +46,31 @@ function! s:suite.close_with_border()
 
     call s:assert.not_exists_autocmd('helpeek')
 endfunction
+
+function! s:suite.vim_normal()
+    let target = 'call'
+    call setbufline('%', 1, target)
+
+    Helpeek
+
+    let popup = s:assert.popup(3, &columns - 4)
+
+    let filetype = getbufvar(popup.bufnr, '&filetype')
+    call s:assert.equals(filetype, 'help')
+
+    let line_number = popup_getpos(popup.window).firstline - 1
+    let line = getbufline(popup.bufnr, line_number)[0]
+    call s:assert.contains(line, '*:' . target . '*')
+endfunction
+
+function! s:suite.vim_normal_with_empty()
+    Helpeek
+
+    call s:assert.not_exists_popup(3, &columns - 4)
+endfunction
+
+if has('nvim')
+    call filter(s:suite, { name -> name !~# '^vim_' })
+else
+    call filter(s:suite, { name -> name !~# '^nvim_' })
+endif

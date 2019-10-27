@@ -31,9 +31,10 @@ function! s:new(tag) abort
     function! help.buffer() abort
         execute 'help' self._tag
         let bufnr = bufnr('%')
-        call setpos('.', [bufnr, line('.') + 1, 1, 0])
+        let line = line('.') + 1
+        call setpos('.', [bufnr, line, 1, 0])
         quit
-        return bufnr
+        return [bufnr, line]
     endfunction
 
     return help

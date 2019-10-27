@@ -15,6 +15,10 @@ function! HelpeekTestBeforeEach(assert) abort
         call self.equals(window_count, a:count, message)
     endfunction
 
+    function! a:assert.contains(haystack, needle) abort
+        call self.true(count(a:haystack, a:needle) != 0, a:needle . ' must be in the haystack: ' . a:haystack)
+    endfunction
+
     function! a:assert.contains_line(needle, line) abort
         let line = getline(a:line)
         call self.true(count(line, a:needle) != 0, a:needle . ' must be in the line, but actual: ' . line)
@@ -25,6 +29,17 @@ function! HelpeekTestBeforeEach(assert) abort
         for line in split(autocmds, "\n")
             call self.true(count(line, a:name, v:true) == 0, a:name . ' should not be in the autocmd: ' . line)
         endfor
+    endfunction
+
+    function! a:assert.popup(row, col) abort
+        let popup = popup_locate(a:row, a:col)
+        call self.not_equals(popup, 0)
+        return {'window': popup, 'bufnr': winbufnr(popup)}
+    endfunction
+
+    function! a:assert.not_exists_popup(row, col) abort
+        let popup = popup_locate(a:row, a:col)
+        call self.equals(popup, 0, 'popup should exist')
     endfunction
 
     filetype on

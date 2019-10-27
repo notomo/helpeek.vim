@@ -14,8 +14,8 @@ function! helpeek#main() abort
 
     call s:window.close()
 
-    let bufnr = help.buffer()
-    call s:window.open(bufnr)
+    let [bufnr, line] = help.buffer()
+    call s:window.open(bufnr, line)
 
     redraw
 endfunction
