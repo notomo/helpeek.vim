@@ -35,17 +35,14 @@ endfunction
 function! s:suite.close_with_border()
     let target = 'call'
     call setbufline('%', 1, target)
-    let parent_window = win_getid()
 
     Helpeek
 
     wincmd w
     call s:assert.window_count(3)
-    quit
 
-    " FIXME: falied
-    " call s:assert.window_count(1)
-    call s:assert.equals(win_getid(), parent_window)
+    quit
+    call s:assert.window_count(1)
 
     call s:assert.not_exists_autocmd('helpeek')
 endfunction
