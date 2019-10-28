@@ -1,0 +1,32 @@
+*helpeek.vim.txt*
+
+==============================================================================
+INTRODUCTION                                        *helpeek.vim-introduction*
+
+*helpeek.vim* is a plugin for peek a help buffer.
+
+- Support neovim and vim
+    - use floating window and popup api
+- Enable to show help from command line mode
+    - this feature is supported by neovim only
+
+==============================================================================
+EXAMPLES                                                *helpeek.vim-examples*
+
+>
+        nnoremap K <Cmd>Helpeek<CR>
+
+        " work in command line mode by using <Cmd>
+        if has('nvim')
+            cnoremap <C-y> <Cmd>Helpeek<CR>
+        endif
+<
+
+==============================================================================
+COMMANDS                                                *helpeek.vim-commands*
+
+:Helpeek                                                            *:Helpeek*
+        Show a help buffer from current context.
+
+==============================================================================
+vim:tw=78:ft=help
