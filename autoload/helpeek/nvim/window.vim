@@ -26,7 +26,7 @@ function! helpeek#nvim#window#new(width, height, row, col) abort
         \ })
         call nvim_buf_set_option(a:bufnr, 'bufhidden', 'wipe')
         call nvim_win_set_var(self._window, '&sidescrolloff', 0)
-        call event_service.on_buffer_wiped(self._window, a:bufnr, { window_id -> self.close() })
+        call event_service.on_window_closed(self._window, a:bufnr, { window_id -> self.close() })
 
         let self._border = helpeek#nvim#window#add_border(self._width, self._height, self._row, self._col, event_service)
     endfunction
@@ -66,7 +66,7 @@ function! helpeek#nvim#window#add_border(width, height, row, col, event_service)
         \ })
         call nvim_win_set_option(self._window, 'winhighlight', 'Normal:StatusLine')
         call nvim_buf_set_option(self._bufnr, 'bufhidden', 'wipe')
-        call self._event_service.on_buffer_wiped(self._window, self._bufnr, { window_id -> self.close() })
+        call self._event_service.on_window_closed(self._window, self._bufnr, { window_id -> self.close() })
     endfunction
 
     function! window.close() abort
