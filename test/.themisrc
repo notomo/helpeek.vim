@@ -3,44 +3,73 @@ call themis#option('recursive', 1)
 
 let s:root = getcwd()
 
-function! HelpeekTestBeforeEach(assert) abort
-    execute 'cd' s:root
+function! HelpeekTestAssert() abort
+    let assert = themis#helper('assert')
 
-    call helpeek#logger#set_func({ msg -> themis#log(msg) })
-    call themis#log('')
-
-    function! a:assert.window_count(count) abort
+    function! assert.window_count(count) abort
         let window_count = tabpagewinnr(tabpagenr(), '$')
         let message = printf('window count must be %s, but actual: %s', a:count, window_count)
         call self.equals(window_count, a:count, message)
     endfunction
 
-    function! a:assert.contains(haystack, needle) abort
+    function! assert.contains(haystack, needle) abort
         call self.true(count(a:haystack, a:needle) != 0, a:needle . ' must be in the haystack: ' . a:haystack)
     endfunction
 
-    function! a:assert.contains_line(needle, line) abort
-        let line = getline(a:line)
-        call self.true(count(line, a:needle) != 0, a:needle . ' must be in the line, but actual: ' . line)
+    function! assert.contains_line(needle, line_number) abort
+        let line = getline(a:line_number)
+        call self.contains(line, a:needle)
     endfunction
 
-    function! a:assert.not_exists_autocmd(name) abort
+    function! assert.not_exists_autocmd(name) abort
         let autocmds = s:redir('autocmd')
         for line in split(autocmds, "\n")
             call self.true(count(line, a:name, v:true) == 0, a:name . ' should not be in the autocmd: ' . line)
         endfor
     endfunction
 
-    function! a:assert.popup(row, col) abort
+    function! assert.popup(row, col) abort
         let popup = popup_locate(a:row, a:col)
         call self.not_equals(popup, 0)
         return {'window': popup, 'bufnr': winbufnr(popup)}
     endfunction
 
-    function! a:assert.not_exists_popup(row, col) abort
+    function! assert.not_exists_popup(row, col) abort
         let popup = popup_locate(a:row, a:col)
         call self.equals(popup, 0, 'popup should exist')
     endfunction
+
+    function! assert.column_number(expected) abort
+        let actual = col('.')
+        let message = printf('column number should be %s, but actual: %s', a:expected, actual)
+        call self.equals(a:expected, actual, message)
+    endfunction
+
+    function! assert.filetype(expected) abort
+        let actual = &filetype
+        let message = printf('&filetype should be %s, but actual: %s', a:expected, actual)
+        call self.equals(a:expected, actual, message)
+    endfunction
+
+    function! assert.buffer_filetype(bufnr, expected) abort
+        let actual = getbufvar(a:bufnr, '&filetype')
+        let message = printf('buffer &filetype should be %s, but actual: %s', a:expected, actual)
+        call self.equals(a:expected, actual, message)
+    endfunction
+
+    function! assert.contains_buffer_line(bufnr, needle, line_number) abort
+        let line = getbufline(a:bufnr, a:line_number)[0]
+        call self.contains(line, a:needle)
+    endfunction
+
+    return assert
+endfunction
+
+function! HelpeekTestBeforeEach(assert) abort
+    execute 'cd' s:root
+
+    call helpeek#logger#set_func({ msg -> themis#log(msg) })
+    call themis#log('')
 
     filetype on
     syntax enable

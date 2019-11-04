@@ -1,6 +1,6 @@
 
 let s:suite = themis#suite('plugin.helpeek')
-let s:assert = themis#helper('assert')
+let s:assert = HelpeekTestAssert()
 
 function! s:suite.before_each()
     call HelpeekTestBeforeEach(s:assert)
@@ -11,16 +11,15 @@ function! s:suite.after_each()
 endfunction
 
 function! s:suite.nvim_normal()
-    let target = 'call'
-    call setbufline('%', 1, target)
+    call setbufline('%', 1, 'call')
 
     Helpeek
 
     wincmd w
     call s:assert.window_count(3)
-    call s:assert.equals(&filetype, 'help')
-    call s:assert.contains_line('*:' . target . '*', line('.') - 1)
-    call s:assert.equals(col('.'), 1)
+    call s:assert.filetype('help')
+    call s:assert.contains_line('*:call*', line('.') - 1)
+    call s:assert.column_number(1)
 
     wincmd p
     call s:assert.window_count(3)
@@ -33,8 +32,7 @@ function! s:suite.nvim_normal_with_empty()
 endfunction
 
 function! s:suite.nvim_close_with_border()
-    let target = 'call'
-    call setbufline('%', 1, target)
+    call setbufline('%', 1, 'call')
 
     Helpeek
 
@@ -48,19 +46,14 @@ function! s:suite.nvim_close_with_border()
 endfunction
 
 function! s:suite.vim_normal()
-    let target = 'call'
-    call setbufline('%', 1, target)
+    call setbufline('%', 1, 'call')
 
     Helpeek
 
     let popup = s:assert.popup(3, &columns - 4)
-
-    let filetype = getbufvar(popup.bufnr, '&filetype')
-    call s:assert.equals(filetype, 'help')
-
+    call s:assert.buffer_filetype(popup.bufnr, 'help')
     let line_number = popup_getpos(popup.window).firstline - 1
-    let line = getbufline(popup.bufnr, line_number)[0]
-    call s:assert.contains(line, '*:' . target . '*')
+    call s:assert.buffer_contains_line(popup.bufnr, '*:call*', line_number)
 endfunction
 
 function! s:suite.vim_normal_with_empty()
