@@ -57,7 +57,7 @@ function! HelpeekTestAssert() abort
         call self.equals(a:expected, actual, message)
     endfunction
 
-    function! assert.contains_buffer_line(bufnr, needle, line_number) abort
+    function! assert.buffer_contains_line(bufnr, needle, line_number) abort
         let line = getbufline(a:bufnr, a:line_number)[0]
         call self.contains(line, a:needle)
     endfunction
