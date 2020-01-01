@@ -45,6 +45,18 @@ function! s:suite.nvim_close_with_border()
     call s:assert.not_exists_autocmd('helpeek')
 endfunction
 
+function! s:suite.nvim_function_help()
+    edit ./test/_data/test.vim
+    normal! w
+
+    Helpeek
+
+    call s:assert.window_count(3)
+
+    wincmd w
+    call s:assert.contains_line('*count()*', line('.') - 1)
+endfunction
+
 function! s:suite.vim_normal()
     call setbufline('%', 1, 'call')
 
@@ -60,6 +72,18 @@ function! s:suite.vim_normal_with_empty()
     Helpeek
 
     call s:assert.not_exists_popup(3, &columns - 4)
+endfunction
+
+function! s:suite.vim_function_help()
+    edit ./test/_data/test.vim
+    normal! w
+
+    Helpeek
+
+    let popup = s:assert.popup(3, &columns - 4)
+    call s:assert.buffer_filetype(popup.bufnr, 'help')
+    let line_number = popup_getpos(popup.window).firstline - 1
+    call s:assert.buffer_contains_line(popup.bufnr, '*count()*', line_number)
 endfunction
 
 if has('nvim')
