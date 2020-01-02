@@ -11,6 +11,8 @@ function! helpeek#target#get() abort
             return printf("'%s'", cword)
         elseif syntax_name ==? 'vimCommand'
             return ':' . cword
+        elseif syntax_name ==? 'vimMapModKey' || syntax_name ==? 'vimMapMod'
+            return printf(':map-<%s>', cword)
         else
             let line = cword
         endif
