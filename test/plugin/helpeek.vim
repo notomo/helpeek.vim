@@ -3,20 +3,52 @@ let s:helper = HelpeekTestHelper()
 let s:suite = s:helper.suite('plugin.helpeek')
 let s:assert = s:helper.assert()
 
-function! s:suite.nvim_normal()
-    call setbufline('%', 1, 'call')
+function! s:suite.builtin_command_help()
+    call s:helper.create_buffer('call hoge()')
+    call s:helper.search('call')
 
     Helpeek
 
-    wincmd w
-    call s:assert.window_count(3)
-    call s:assert.filetype('help')
-    call s:assert.contains_line('*:call*', line('.') - 1)
+    call s:assert.opened_help_tag(':call')
     call s:assert.column_number(1)
-
-    wincmd p
-    call s:assert.window_count(3)
 endfunction
+
+function! s:suite.builtin_function_help()
+    call s:helper.create_buffer('call count([])')
+    call s:helper.search('count')
+
+    Helpeek
+
+    call s:assert.opened_help_tag('count()')
+endfunction
+
+function! s:suite.map_mod_help()
+    call s:helper.create_buffer('nnoremap <buffer> F :<C-u>echomsg "test"<CR>')
+    call s:helper.search('buffer')
+
+    Helpeek
+
+    call s:assert.opened_help_tag(':map-<buffer>')
+endfunction
+
+function! s:suite.var_help()
+    call s:helper.create_buffer("let g:mapleader = ','")
+    call s:helper.search('mapleader')
+
+    Helpeek
+
+    call s:assert.opened_help_tag('mapleader')
+endfunction
+
+function! s:suite.autoload_function_help()
+    call s:helper.create_buffer('call gnat#New()')
+    call s:helper.search('gnat')
+
+    Helpeek
+
+    call s:assert.opened_help_tag('gnat#New()')
+endfunction
+
 
 function! s:suite.nvim_normal_with_empty()
     Helpeek
@@ -24,131 +56,24 @@ function! s:suite.nvim_normal_with_empty()
     call s:assert.window_count(1)
 endfunction
 
+function! s:suite.vim_normal_with_empty()
+    Helpeek
+
+    call s:assert.not_exists_popup()
+endfunction
+
 function! s:suite.nvim_close_with_border()
-    call setbufline('%', 1, 'call')
+    call s:helper.create_buffer('call hoge()')
 
     Helpeek
 
-    wincmd w
     call s:assert.window_count(3)
+    wincmd w
 
     quit
     call s:assert.window_count(1)
 
     call s:assert.not_exists_autocmd('helpeek')
-endfunction
-
-function! s:suite.nvim_function_help()
-    edit ./test/_data/test.vim
-    normal! w
-
-    Helpeek
-
-    call s:assert.window_count(3)
-
-    wincmd w
-    call s:assert.contains_line('*count()*', line('.') - 1)
-endfunction
-
-function! s:suite.nvim_map_mod_help()
-    edit ./test/_data/test.vim
-    normal! jw
-
-    Helpeek
-
-    call s:assert.window_count(3)
-
-    wincmd w
-    call s:assert.contains_line('*:map-<buffer>*', line('.') - 1)
-endfunction
-
-function! s:suite.nvim_var_help()
-    edit ./test/_data/test.vim
-    normal! 2jw
-
-    Helpeek
-
-    call s:assert.window_count(3)
-
-    wincmd w
-    call s:assert.contains_line('*mapleader*', line('.') - 1)
-endfunction
-
-function! s:suite.nvim_autoload_function_help()
-    edit ./test/_data/test.vim
-    normal! 3jw
-
-    Helpeek
-
-    call s:assert.window_count(3)
-
-    wincmd w
-    call s:assert.contains_line('*gnat#New()*', line('.') - 1)
-endfunction
-
-function! s:suite.vim_normal()
-    call setbufline('%', 1, 'call')
-
-    Helpeek
-
-    let popup = s:assert.popup(3, &columns - 4)
-    call s:assert.buffer_filetype(popup.bufnr, 'help')
-    let line_number = popup_getpos(popup.window).firstline - 1
-    call s:assert.buffer_contains_line(popup.bufnr, '*:call*', line_number)
-endfunction
-
-function! s:suite.vim_normal_with_empty()
-    Helpeek
-
-    call s:assert.not_exists_popup(3, &columns - 4)
-endfunction
-
-function! s:suite.vim_function_help()
-    edit ./test/_data/test.vim
-    normal! w
-
-    Helpeek
-
-    let popup = s:assert.popup(3, &columns - 4)
-    call s:assert.buffer_filetype(popup.bufnr, 'help')
-    let line_number = popup_getpos(popup.window).firstline - 1
-    call s:assert.buffer_contains_line(popup.bufnr, '*count()*', line_number)
-endfunction
-
-function! s:suite.vim_map_mod_help()
-    edit ./test/_data/test.vim
-    normal! jw
-
-    Helpeek
-
-    let popup = s:assert.popup(3, &columns - 4)
-    call s:assert.buffer_filetype(popup.bufnr, 'help')
-    let line_number = popup_getpos(popup.window).firstline - 1
-    call s:assert.buffer_contains_line(popup.bufnr, '*:map-<buffer>*', line_number)
-endfunction
-
-function! s:suite.vim_var_help()
-    edit ./test/_data/test.vim
-    normal! 2jw
-
-    Helpeek
-
-    let popup = s:assert.popup(3, &columns - 4)
-    call s:assert.buffer_filetype(popup.bufnr, 'help')
-    let line_number = popup_getpos(popup.window).firstline - 1
-    call s:assert.buffer_contains_line(popup.bufnr, '*mapleader*', line_number)
-endfunction
-
-function! s:suite.vim_autoload_function_help()
-    edit ./test/_data/test.vim
-    normal! 3jw
-
-    Helpeek
-
-    let popup = s:assert.popup(3, &columns - 4)
-    call s:assert.buffer_filetype(popup.bufnr, 'help')
-    let line_number = popup_getpos(popup.window).firstline - 1
-    call s:assert.buffer_contains_line(popup.bufnr, '*gnat#New()*', line_number)
 endfunction
 
 if has('nvim')
