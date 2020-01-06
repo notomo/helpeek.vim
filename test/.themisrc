@@ -3,7 +3,27 @@ call themis#option('recursive', 1)
 
 let s:root = getcwd()
 
-function! HelpeekTestAssert() abort
+function! HelpeekTestHelper() abort
+    let helper = {
+        \ 'before_each': function('s:before_each'),
+        \ 'after_each': function('s:after_each'),
+    \ }
+
+    function! helper.suite(name) abort
+        let suite = themis#suite(a:name)
+        let suite.before_each = self.before_each
+        let suite.after_each = self.after_each
+        return suite
+    endfunction
+
+    function! helper.assert() abort
+        return s:assert()
+    endfunction
+
+    return helper
+endfunction
+
+function! s:assert() abort
     let assert = themis#helper('assert')
 
     function! assert.window_count(count) abort
@@ -65,7 +85,7 @@ function! HelpeekTestAssert() abort
     return assert
 endfunction
 
-function! HelpeekTestBeforeEach(assert) abort
+function! s:before_each() abort
     execute 'cd' s:root
 
     call helpeek#logger#set_func({ msg -> themis#log(msg) })
@@ -75,7 +95,7 @@ function! HelpeekTestBeforeEach(assert) abort
     syntax enable
 endfunction
 
-function! HelpeekTestAfterEach() abort
+function! s:after_each() abort
     tabedit
     tabonly!
     silent! %bwipeout!

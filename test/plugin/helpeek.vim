@@ -1,14 +1,7 @@
 
-let s:suite = themis#suite('plugin.helpeek')
-let s:assert = HelpeekTestAssert()
-
-function! s:suite.before_each()
-    call HelpeekTestBeforeEach(s:assert)
-endfunction
-
-function! s:suite.after_each()
-    call HelpeekTestAfterEach()
-endfunction
+let s:helper = HelpeekTestHelper()
+let s:suite = s:helper.suite('plugin.helpeek')
+let s:assert = s:helper.assert()
 
 function! s:suite.nvim_normal()
     call setbufline('%', 1, 'call')
