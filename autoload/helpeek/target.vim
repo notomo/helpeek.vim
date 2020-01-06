@@ -13,6 +13,12 @@ function! helpeek#target#get() abort
             return ':' . cword
         elseif syntax_name ==? 'vimMapModKey' || syntax_name ==? 'vimMapMod'
             return printf(':map-<%s>', cword)
+        elseif syntax_name ==? 'vimVar'
+            return substitute(expand('<cWORD>'), '\v^g:', '', '')
+        elseif syntax_name ==? 'vimIsCommand'
+            " HACK: for autoload function
+            let func_name = substitute(expand('<cWORD>'), '\v\(.*', '', '')
+            return func_name . '()'
         else
             let line = cword
         endif
