@@ -13,6 +13,15 @@ function! s:suite.builtin_command_help()
     call s:assert.column_number(1)
 endfunction
 
+function! s:suite.user_command_help()
+    call s:helper.create_buffer('Helpeek')
+    call s:helper.search('Helpeek')
+
+    Helpeek
+
+    call s:assert.opened_help_tag(':Helpeek')
+endfunction
+
 function! s:suite.builtin_function_help()
     call s:helper.create_buffer('call count([])')
     call s:helper.search('count')

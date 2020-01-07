@@ -17,8 +17,9 @@ function! helpeek#target#get() abort
             return substitute(expand('<cWORD>'), '\v^g:', '', '')
         elseif syntax_name ==? 'vimIsCommand'
             " HACK: for autoload function
-            let func_name = substitute(expand('<cWORD>'), '\v\(.*', '', '')
-            return func_name . '()'
+            let cword = expand('<cWORD>')
+            let name = substitute(cword, '\v\(.*', '', '')
+            return count(cword, name . '(') == 1 ? name . '()' : name
         else
             let line = cword
         endif

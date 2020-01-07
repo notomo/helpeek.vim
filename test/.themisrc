@@ -1,6 +1,9 @@
 
 call themis#option('recursive', 1)
 
+" generation for the `user_command_help` test
+execute 'helptags' expand('<sfile>:h:h') . '/doc'
+
 let s:root = getcwd()
 
 function! HelpeekTestHelper() abort
