@@ -22,14 +22,12 @@ function! helpeek#event#service() abort
     function! service._on_event(event_name, id, bufnr, callback) abort
         let s:callbacks[a:event_name] = a:callback
         let event = a:event_name . ':' . a:id
-        call self.logger.label('set').log(event)
         execute printf('autocmd User %s ++nested call s:callback(expand("<amatch>"), "%s", %s)', event, a:event_name, a:bufnr)
     endfunction
 
     function! service.window_leave(bufnr, window_id) abort
         let event_name = s:buffer_event_name(s:WINDOW_LEAVE, a:bufnr)
         let event = printf('%s:%s', event_name, a:window_id)
-        call self.logger.log(event)
         execute printf('doautocmd User %s', event)
     endfunction
 

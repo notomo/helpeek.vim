@@ -11,22 +11,24 @@ INTRODUCTION                                        *helpeek.vim-introduction*
     - this feature is supported by neovim only
 
 ==============================================================================
-EXAMPLES                                                *helpeek.vim-examples*
-
->
-        nnoremap K :<C-u>Helpeek<CR>
-
-        " works in command-line mode by using <Cmd>
-        if has('nvim')
-            cnoremap <C-y> <Cmd>Helpeek<CR>
-        endif
-<
-
-==============================================================================
 COMMANDS                                                *helpeek.vim-commands*
 
 :Helpeek                                                            *:Helpeek*
-        Show a help buffer from current context.
+  Show a help buffer from current context.
+  - `Helpeek` opens the cursor position help
+  - `Helpeek [{arg}]` opens the argument help
 
 ==============================================================================
-vim:tw=78:ft=help
+EXAMPLES                                                *helpeek.vim-examples*
+
+>
+  nnoremap K :<C-u>Helpeek<CR>
+
+  " works in command-line mode by using <Cmd>
+  if has('nvim')
+      cnoremap <C-y> <Cmd>Helpeek<CR>
+  endif
+<
+
+==============================================================================
+vim:tw=78:ts=8:ft=help

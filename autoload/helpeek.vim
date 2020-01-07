@@ -1,8 +1,10 @@
 
 let s:window = helpeek#window#new()
 
-function! helpeek#main() abort
-    let target = helpeek#target#get()
+function! helpeek#main(...) abort
+    let arg = get(a:000, 0, v:null)
+
+    let target = helpeek#target#get(arg)
     if empty(target)
         return
     endif

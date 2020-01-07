@@ -1,5 +1,9 @@
 
-function! helpeek#target#get() abort
+function! helpeek#target#get(arg) abort
+    if !empty(a:arg)
+        return a:arg
+    endif
+
     if mode() ==# 'c'
         let line = getcmdline()
     else

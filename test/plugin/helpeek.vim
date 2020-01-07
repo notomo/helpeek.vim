@@ -59,6 +59,13 @@ function! s:suite.autoload_function_help()
 endfunction
 
 
+function! s:suite.with_arg()
+    Helpeek count()
+
+    call s:assert.opened_help_tag('count()')
+endfunction
+
+
 function! s:suite.nvim_normal_with_empty()
     Helpeek
 
