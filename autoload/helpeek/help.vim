@@ -7,6 +7,7 @@ function! helpeek#help#find(target) abort
     let paths = [help_path]
     call extend(paths, globpath(&runtimepath, 'doc/tags', v:true, v:true))
 
+    let found_tags = []
     for path in paths
         if !filereadable(path)
             continue
@@ -15,10 +16,15 @@ function! helpeek#help#find(target) abort
             let tag = split(line, "\t")[0]
             if count(tag, a:target) != 0
                 call logger.log('found tag: ' . tag)
-                return s:new(tag)
+                call add(found_tags, tag)
             endif
         endfor
     endfor
+    if !empty(found_tags)
+        call sort(found_tags, {a, b -> strlen(a) > strlen(b) })
+        call logger.log('found and matched tag: ' . found_tags[0])
+        return s:new(found_tags[0])
+    endif
 
     return v:null
 endfunction

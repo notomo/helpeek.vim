@@ -58,6 +58,15 @@ function! s:suite.autoload_function_help()
     call s:assert.opened_help_tag('gnat#New()')
 endfunction
 
+function! s:suite.backword_match_function_name_help()
+    call s:helper.create_buffer('call search()')
+    call s:helper.search('search')
+
+    Helpeek
+
+    call s:assert.opened_help_tag('search()')
+endfunction
+
 
 function! s:suite.with_arg()
     Helpeek count()
