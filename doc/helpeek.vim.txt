@@ -15,8 +15,10 @@ COMMANDS                                                *helpeek.vim-commands*
 
 :Helpeek                                                            *:Helpeek*
   Show a help buffer from current context.
-  - `Helpeek` opens the cursor position help
-  - `Helpeek [{arg}]` opens the argument help
+>
+  :Helpeek " opens the cursor position help
+  :Helpeek count() " opens count() help
+<
 
 ==============================================================================
 EXAMPLES                                                *helpeek.vim-examples*
