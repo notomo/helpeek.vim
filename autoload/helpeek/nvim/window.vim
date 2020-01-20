@@ -1,4 +1,6 @@
 
+let s:windows = {}
+
 function! helpeek#nvim#window#new(width, height, row, col) abort
     let window = {
         \ '_width': a:width,
@@ -11,8 +13,6 @@ function! helpeek#nvim#window#new(width, height, row, col) abort
     \ }
 
     function! window.open(bufnr, _line) abort
-        let event_service = helpeek#event#service()
-
         let self._window = nvim_open_win(a:bufnr, v:false, {
             \ 'relative': 'editor',
             \ 'width': self._width,
@@ -26,9 +26,15 @@ function! helpeek#nvim#window#new(width, height, row, col) abort
         \ })
         call nvim_buf_set_option(a:bufnr, 'bufhidden', 'wipe')
         call nvim_win_set_var(self._window, '&sidescrolloff', 0)
-        call event_service.on_buffer_wiped(self._window, a:bufnr, { window_id -> self.close() })
 
-        let self._border = helpeek#nvim#window#add_border(self._width, self._height, self._row, self._col, event_service)
+        let s:windows[self._window] = self
+
+        let group_name = 'helpeek:' . self._window
+        execute 'augroup' group_name
+            execute printf('autocmd %s WinClosed * ++nested call s:close(expand("<afile>"))', group_name)
+        execute 'augroup END'
+
+        let self._border = helpeek#nvim#window#add_border(self._width, self._height, self._row, self._col)
     endfunction
 
     function! window.close() abort
@@ -43,12 +49,11 @@ function! helpeek#nvim#window#new(width, height, row, col) abort
     return window
 endfunction
 
-function! helpeek#nvim#window#add_border(width, height, row, col, event_service) abort
+function! helpeek#nvim#window#add_border(width, height, row, col) abort
     let window = {
         \ '_bufnr': nvim_create_buf(v:false, v:true),
         \ '_row_thickness': 1,
         \ '_col_thickness': 2,
-        \ '_event_service': a:event_service,
         \ 'logger': helpeek#logger#new('window').label('border'),
     \ }
 
@@ -66,7 +71,6 @@ function! helpeek#nvim#window#add_border(width, height, row, col, event_service)
         \ })
         call nvim_win_set_option(self._window, 'winhighlight', 'Normal:StatusLine')
         call nvim_buf_set_option(self._bufnr, 'bufhidden', 'wipe')
-        call self._event_service.on_buffer_wiped(self._window, self._bufnr, { window_id -> self.close() })
     endfunction
 
     function! window.close() abort
@@ -79,4 +83,14 @@ function! helpeek#nvim#window#add_border(width, height, row, col, event_service)
     call window.open(a:width, a:height, a:row, a:col)
 
     return window
+endfunction
+
+function! s:close(window_id) abort
+    if !has_key(s:windows, a:window_id)
+        return
+    endif
+    let window = s:windows[a:window_id]
+    call window.close()
+    call remove(s:windows, a:window_id)
+    execute 'autocmd! helpeek:' . a:window_id
 endfunction

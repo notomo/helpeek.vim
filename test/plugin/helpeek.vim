@@ -95,6 +95,12 @@ function! s:suite.nvim_close_with_border()
     call s:assert.window_count(3)
     wincmd w
 
+    " goto other help file
+    call s:helper.search('|gO|')
+    execute "normal! \<C-]>"
+
+    call s:helper.autocmds_log()
+
     quit
     call s:assert.window_count(1)
 
