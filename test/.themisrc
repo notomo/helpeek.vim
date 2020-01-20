@@ -37,6 +37,13 @@ function! HelpeekTestHelper() abort
         return result
     endfunction
 
+    function! helper.autocmds_log() abort
+        let autocmds = s:redir('autocmd')
+        for line in filter(split(autocmds, "\n"), { _, v -> count(v, 'helpeek', v:true) })
+            call themis#log('[autocmd] ' . line)
+        endfor
+    endfunction
+
     return helper
 endfunction
 
