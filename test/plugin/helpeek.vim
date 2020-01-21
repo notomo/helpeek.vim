@@ -1,7 +1,7 @@
 
 let s:helper = HelpeekTestHelper()
 let s:suite = s:helper.suite('plugin.helpeek')
-let s:assert = s:helper.assert()
+let s:assert = s:helper.assert
 
 function! s:suite.builtin_command_help()
     call s:helper.create_buffer('call hoge()')

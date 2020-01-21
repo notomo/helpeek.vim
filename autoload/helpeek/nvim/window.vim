@@ -34,7 +34,7 @@ function! helpeek#nvim#window#new(width, height, row, col) abort
             execute printf('autocmd %s WinClosed * ++nested call s:close(expand("<afile>"))', group_name)
         execute 'augroup END'
 
-        let self._border = helpeek#nvim#window#add_border(self._width, self._height, self._row, self._col)
+        let self._border = s:add_border(self._width, self._height, self._row, self._col)
     endfunction
 
     function! window.close() abort
@@ -49,7 +49,7 @@ function! helpeek#nvim#window#new(width, height, row, col) abort
     return window
 endfunction
 
-function! helpeek#nvim#window#add_border(width, height, row, col) abort
+function! s:add_border(width, height, row, col) abort
     let window = {
         \ '_bufnr': nvim_create_buf(v:false, v:true),
         \ '_row_thickness': 1,
