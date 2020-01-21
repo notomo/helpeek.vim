@@ -69,7 +69,7 @@ function! s:add_border(width, height, row, col) abort
             \ 'external': v:false,
             \ 'style': 'minimal',
         \ })
-        call nvim_win_set_option(self._window, 'winhighlight', 'Normal:StatusLine')
+        call nvim_win_set_option(self._window, 'winhighlight', 'Normal:HelpeekBorder')
         call nvim_buf_set_option(self._bufnr, 'bufhidden', 'wipe')
     endfunction
 

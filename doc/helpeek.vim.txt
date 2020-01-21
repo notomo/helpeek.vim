@@ -21,6 +21,12 @@ COMMANDS                                                *helpeek.vim-commands*
 <
 
 ==============================================================================
+HIGHLIGHT GROUPS                                *helpeek.vim-highlight-groups*
+
+HelpeekBorder                                                  *HelpeekBorder*
+  window border highlight group
+
+==============================================================================
 EXAMPLES                                                *helpeek.vim-examples*
 
 >

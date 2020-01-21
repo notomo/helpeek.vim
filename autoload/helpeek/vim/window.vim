@@ -14,7 +14,7 @@ function! helpeek#vim#window#new(width, height, row, col) abort
             \ 'col': self._col,
             \ 'pos': 'topright',
             \ 'border': [1, 2, 1, 2],
-            \ 'borderhighlight': ['StatusLine'],
+            \ 'borderhighlight': ['HelpeekBorder'],
             \ 'maxheight': self._height,
             \ 'maxwidth': self._width,
             \ 'firstline': a:line,

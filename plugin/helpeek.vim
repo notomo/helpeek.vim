@@ -9,3 +9,6 @@ let g:loaded_helpeek = 1
 " :Helpeek count() " opens count() help
 " ```
 command! -nargs=? Helpeek call helpeek#main(<q-args>)
+
+"" window border highlight group
+highlight default link HelpeekBorder StatusLine
