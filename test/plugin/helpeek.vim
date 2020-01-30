@@ -58,6 +58,15 @@ function! s:suite.autoload_function_help()
     call s:assert.opened_help_tag('gnat#New()')
 endfunction
 
+function! s:suite.highlight_group_help()
+    call s:helper.create_buffer('echohl ErrorMsg')
+    call s:helper.search('ErrorMsg')
+
+    Helpeek
+
+    call s:assert.opened_help_tag('hl-ErrorMsg')
+endfunction
+
 function! s:suite.backword_match_function_name_help()
     call s:helper.create_buffer('call search()')
     call s:helper.search('search')

@@ -19,6 +19,8 @@ function! helpeek#target#get(arg) abort
             return printf(':map-<%s>', cword)
         elseif syntax_name ==? 'vimVar'
             return substitute(expand('<cWORD>'), '\v^g:', '', '')
+        elseif syntax_name ==? 'vimHLGroup'
+            return printf('hl-%s', cword)
         elseif syntax_name ==? 'vimIsCommand'
             " HACK: for autoload function
             let cword = expand('<cWORD>')
