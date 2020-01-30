@@ -1,4 +1,5 @@
 # helpeek.vim
+![Build Status](https://github.com/notomo/helpeek.vim/workflows/ci/badge.svg?branch=master)
 
 <img src="https://raw.github.com/wiki/notomo/helpeek.vim/images/demo.gif" width="1280">
 
