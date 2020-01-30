@@ -21,7 +21,7 @@ function! helpeek#help#find(target) abort
         endfor
     endfor
     if !empty(found_tags)
-        call sort(found_tags, {a, b -> strlen(a) > strlen(b) })
+        call sort(found_tags, { a, b -> strlen(a) - strlen(b) })
         call logger.log('found and matched tag: ' . found_tags[0])
         return s:new(found_tags[0])
     endif
