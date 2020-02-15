@@ -67,6 +67,24 @@ function! s:suite.highlight_group_help()
     call s:assert.opened_help_tag('hl-ErrorMsg')
 endfunction
 
+function! s:suite.syn_help()
+    call s:helper.create_buffer('syn keyword helpeekTest contained TEST')
+    call s:helper.search('keyword')
+
+    Helpeek
+
+    call s:assert.opened_help_tag(':syn-keyword')
+endfunction
+
+function! s:suite.syn_type_help()
+    call s:helper.create_buffer('syntax include syntax/vim.vim')
+    call s:helper.search('include')
+
+    Helpeek
+
+    call s:assert.opened_help_tag(':syn-include')
+endfunction
+
 function! s:suite.backword_match_function_name_help()
     call s:helper.create_buffer('call search()')
     call s:helper.search('search')
