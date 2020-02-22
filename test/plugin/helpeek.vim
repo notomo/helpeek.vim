@@ -85,6 +85,16 @@ function! s:suite.syn_type_help()
     call s:assert.opened_help_tag(':syn-include')
 endfunction
 
+function! s:suite.command_attribute_help()
+    call s:helper.create_buffer('command! -nargs=* Hoge echo hoge')
+    call s:helper.search('nargs')
+
+    Helpeek
+
+    call s:assert.opened_help_tag(':command-nargs')
+endfunction
+
+
 function! s:suite.backword_match_function_name_help()
     call s:helper.create_buffer('call search()')
     call s:helper.search('search')
@@ -93,7 +103,6 @@ function! s:suite.backword_match_function_name_help()
 
     call s:assert.opened_help_tag('search()')
 endfunction
-
 
 function! s:suite.with_arg()
     Helpeek count()
