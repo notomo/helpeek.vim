@@ -5,43 +5,40 @@ function! helpeek#target#get(arg) abort
     endif
 
     if mode() ==# 'c'
-        let line = getcmdline()
-    else
-        let cword = expand('<cword>')
-        let syntax_name = synIDattr(synID(line('.'), col('.'), v:true), 'name')
-        if syntax_name ==? 'vimFuncName'
-            return cword . '()'
-        elseif syntax_name ==? 'vimOption'
-            return printf("'%s'", cword)
-        elseif syntax_name ==? 'vimCommand'
-            return ':' . cword
-        elseif syntax_name ==? 'vimMapModKey' || syntax_name ==? 'vimMapMod'
-            return printf(':map-<%s>', cword)
-        elseif syntax_name ==? 'vimVar'
-            return substitute(expand('<cWORD>'), '\v^g:', '', '')
-        elseif syntax_name ==? 'vimHLGroup'
-            return printf('hl-%s', cword)
-        elseif syntax_name =~? 'vimUserAttrb'
-            return printf(':command-%s', cword)
-        elseif syntax_name =~? 'vimSyn\k\+'
-            return printf(':syn-%s', cword)
-        elseif syntax_name ==? 'vimIsCommand'
-            " HACK: for autoload function
-            let cword = expand('<cWORD>')
-            let name = substitute(cword, '\v\(.*', '', '')
-            return count(cword, name . '(') == 1 ? name . '()' : name
-        else
-            let line = cword
+        let factors = split(getcmdline(), '\v\s')
+        if empty(factors)
+            return ''
+        elseif len(factors) == 1
+            return ':' . factors[0]
         endif
-    endif
-    if empty(line)
-        return ''
+        return factors[-1]
     endif
 
-    let factors = split(line, '\v\s')
-    if len(factors) == 1
-        return ':' . factors[0]
+    let cword = expand('<cword>')
+
+    let syntax_name = synIDattr(synID(line('.'), col('.'), v:true), 'name')
+    if syntax_name ==? 'vimFuncName'
+        return cword . '()'
+    elseif syntax_name ==? 'vimOption'
+        return printf("'%s'", cword)
+    elseif syntax_name ==? 'vimCommand'
+        return ':' . cword
+    elseif syntax_name ==? 'vimMapModKey' || syntax_name ==? 'vimMapMod'
+        return printf(':map-<%s>', cword)
+    elseif syntax_name ==? 'vimVar'
+        return substitute(expand('<cWORD>'), '\v^g:', '', '')
+    elseif syntax_name ==? 'vimHLGroup'
+        return printf('hl-%s', cword)
+    elseif syntax_name =~? 'vimUserAttrb'
+        return printf(':command-%s', cword)
+    elseif syntax_name =~? 'vimSyn\k\+'
+        return printf(':syn-%s', cword)
+    elseif syntax_name ==? 'vimIsCommand'
+        " HACK: for autoload function
+        let cword = expand('<cWORD>')
+        let name = substitute(cword, '\v\(.*', '', '')
+        return count(cword, name . '(') == 1 ? name . '()' : name
     endif
 
-    return factors[-1]
+    return cword
 endfunction

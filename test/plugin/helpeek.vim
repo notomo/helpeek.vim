@@ -94,6 +94,15 @@ function! s:suite.command_attribute_help()
     call s:assert.opened_help_tag(':command-nargs')
 endfunction
 
+function! s:suite.autocmd_group_help()
+    call s:helper.create_buffer('autocmd BufEnter * echo 1')
+    call s:helper.search('BufEnter')
+
+    Helpeek
+
+    call s:assert.opened_help_tag('BufEnter')
+endfunction
+
 
 function! s:suite.backword_match_function_name_help()
     call s:helper.create_buffer('call search()')
@@ -110,6 +119,24 @@ function! s:suite.with_arg()
     call s:assert.opened_help_tag('count()')
 endfunction
 
+
+function! s:suite.nvim_cmdline_with_set()
+    call s:helper.execute_with_cmdline('set')
+
+    call s:assert.opened_help_tag(':set')
+endfunction
+
+function! s:suite.nvim_cmdline_with_option()
+    call s:helper.execute_with_cmdline('set expandtab')
+
+    call s:assert.opened_help_tag("'expandtab'")
+endfunction
+
+function! s:suite.nvim_cmdline_with_empty()
+    call s:helper.execute_with_cmdline('')
+
+    call s:assert.window_count(1)
+endfunction
 
 function! s:suite.nvim_normal_with_empty()
     Helpeek

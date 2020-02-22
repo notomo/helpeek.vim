@@ -41,6 +41,11 @@ function! HelpeekTestHelper() abort
         endfor
     endfunction
 
+    function! helper.execute_with_cmdline(line) abort
+        let line = printf(":%s\<Cmd>Helpeek\<CR>", a:line)
+        call feedkeys(line, 'nx')
+    endfunction
+
     return helper
 endfunction
 
