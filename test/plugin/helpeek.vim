@@ -119,6 +119,26 @@ function! s:suite.with_arg()
     call s:assert.opened_help_tag('count()')
 endfunction
 
+function! s:suite.normal_in_cmdline_window()
+    let messenger = s:helper.messenger()
+    call s:helper.open_cmdline_window()
+
+    call s:helper.input_keys(":Helpeek call\<CR>")
+
+    call s:assert.window_count(1)
+    call s:assert.message(messenger, '[helpeek] not supported cmdline-window')
+endfunction
+
+function! s:suite.nvim_cmdline_in_cmdline_window()
+    let messenger = s:helper.messenger()
+    call s:helper.open_cmdline_window()
+
+    call s:helper.execute_with_cmdline('call')
+
+    call s:assert.window_count(1)
+    call s:assert.message(messenger, '[helpeek] not supported cmdline-window')
+endfunction
+
 
 function! s:suite.nvim_cmdline_with_set()
     call s:helper.execute_with_cmdline('set')

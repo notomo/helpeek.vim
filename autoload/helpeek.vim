@@ -2,6 +2,10 @@
 let s:window = helpeek#window#new()
 
 function! helpeek#main(...) abort
+    if !empty(getcmdwintype())
+        return helpeek#messenger#new().warn('not supported cmdline-window')
+    endif
+
     let arg = get(a:000, 0, v:null)
 
     let target = helpeek#target#get(arg)
