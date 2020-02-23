@@ -119,7 +119,8 @@ function! s:suite.with_arg()
     call s:assert.opened_help_tag('count()')
 endfunction
 
-function! s:suite.normal_in_cmdline_window()
+" FIXME: input_keys stucks with windows vim
+function! s:suite.nvim_normal_in_cmdline_window()
     let messenger = s:helper.messenger()
     call s:helper.open_cmdline_window()
 

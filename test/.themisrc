@@ -23,6 +23,9 @@ function! HelpeekTestHelper() abort
     endfunction
 
     function! helper.after_each() abort
+        if !empty(getcmdwintype())
+            quit!
+        endif
         tabedit
         tabonly!
         silent! %bwipeout!
