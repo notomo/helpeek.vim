@@ -25,6 +25,8 @@ function! helpeek#target#get(arg) abort
         return ':' . cword
     elseif syntax_name ==? 'vimMapModKey' || syntax_name ==? 'vimMapMod'
         return printf(':map-<%s>', cword)
+    elseif syntax_name ==? 'vimVar' && expand('<cWORD>') =~? '&\k\+'
+        return printf("'%s'", substitute(cword, '&', '', ''))
     elseif syntax_name ==? 'vimVar'
         return substitute(expand('<cWORD>'), '\v^g:', '', '')
     elseif syntax_name ==? 'vimHLGroup'

@@ -103,6 +103,15 @@ function! s:suite.autocmd_group_help()
     call s:assert.opened_help_tag('BufEnter')
 endfunction
 
+function! s:suite.option_variable_help()
+    call s:helper.create_buffer('let &filetype = "vim"')
+    call s:helper.search('filetype')
+
+    Helpeek
+
+    call s:assert.opened_help_tag("'filetype'")
+endfunction
+
 
 function! s:suite.backword_match_function_name_help()
     call s:helper.create_buffer('call search()')
